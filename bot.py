@@ -75,12 +75,18 @@ def get_crypto_price(message):
             
         data = response.json()
         
-        if not data:
+        # Cek apakah CoinGecko membalas dengan pesan error (Dictionary) alih-alih data koin (List)
+        if isinstance(data, dict) and 'error' in data:
+            bot.reply_to(message, "⚠️ CoinGecko API is currently busy or blocking requests from this server. Please try again later.")
+            return
+            
+        # Cek apakah data kosong atau bukan berbentuk List
+        if not data or not isinstance(data, list):
             bot.reply_to(message, f"❓ Sorry, '{coin_name}' not found. Please check the coin name and try again.")
             return
             
         coin = data[0]
-        price = coin['current_price']
+        price = coin.get('current_price', 0)
         price_change_24h = coin['price_change_percentage_24h']
         market_cap = coin['market_cap']
         volume = coin['total_volume']
