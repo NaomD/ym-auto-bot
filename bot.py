@@ -79,7 +79,7 @@ def get_crypto_price(message):
             bot.reply_to(message, f"❓ Sorry, '{coin_name}' not found. Please check the coin name and try again.")
             return
             
-        coin = data
+        coin = data[0]
         price = coin['current_price']
         price_change_24h = coin['price_change_percentage_24h']
         market_cap = coin['market_cap']
